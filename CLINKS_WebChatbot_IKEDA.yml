@@ -1,0 +1,379 @@
+app:
+  description: チーム目標 1~3月
+  icon: 📑
+  icon_background: '#EFF1F5'
+  mode: advanced-chat
+  name: 'CLINKS_WebChatbot '
+  use_icon_as_answer_icon: true
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: 1711528917469-1711528919501
+      source: '1711528917469'
+      sourceHandle: source
+      target: '1711528919501'
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: if-else
+      id: 1711528914102-source-1738584377542-target
+      source: '1711528914102'
+      sourceHandle: source
+      target: '1738584377542'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: 1738584377542-true-17385846312060-target
+      source: '1738584377542'
+      sourceHandle: 'true'
+      target: '17385846312060'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 17385846312060-source-1711528917469-target
+      source: '17385846312060'
+      sourceHandle: source
+      target: '1711528917469'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 17385847659560-source-17385847792280-target
+      source: '17385847659560'
+      sourceHandle: source
+      target: '17385847792280'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1738584377542-false-17385847659560-target
+      source: '1738584377542'
+      sourceHandle: 'false'
+      target: '17385847659560'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables: []
+      height: 54
+      id: '1711528914102'
+      position:
+        x: 79.5
+        y: 2634.5
+      positionAbsolute:
+        x: 79.5
+        y: 2634.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - sys
+          - query
+        desc: Invoking large language models to answer questions or process natural
+          language
+        memory:
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            frequency_penalty: 0
+            max_tokens: 512
+            presence_penalty: 0
+            temperature: 0.7
+            top_p: 1
+          mode: chat
+          name: gemini-2.0-flash-exp
+          provider: google
+        prompt_template:
+        - id: 9b6f207d-9ca1-4cd7-a936-9ac543e96ded
+          role: system
+          text: "You are a helpful assistant. \nUse the following context as your\
+            \ learned knowledge, inside <context></context> XML tags.\n<context>\n\
+            {{#context#}}\n</context>\nWhen answer to user:\n- If you don't know,\
+            \ just say that you don't know.\n- If you don't know when you are not\
+            \ sure, ask for clarification.\nAvoid mentioning that you obtained the\
+            \ information from the context.\nAnd answer according to the language\
+            \ of the user's question."
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 158
+      id: '1711528917469'
+      position:
+        x: 945.0755772234622
+        y: 2549.681655674259
+      positionAbsolute:
+        x: 945.0755772234622
+        y: 2549.681655674259
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1711528917469.text#}}'
+        desc: ''
+        selected: false
+        title: Answer
+        type: answer
+        variables: []
+      height: 103
+      id: '1711528919501'
+      position:
+        x: 1212.5693610728024
+        y: 2549.681655674259
+      positionAbsolute:
+        x: 1212.5693610728024
+        y: 2549.681655674259
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: e170c671-fa5e-42ea-affc-acb4afd3670c
+            value: RES
+            varType: string
+            variable_selector:
+            - sys
+            - query
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: IF/ELSE
+        type: if-else
+      height: 126
+      id: '1738584377542'
+      position:
+        x: 382.5189742184624
+        y: 2613.793565728311
+      positionAbsolute:
+        x: 382.5189742184624
+        y: 2613.793565728311
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - b21de71f-31fd-4ef1-936e-0770ffb1d03d
+        desc: Allows you to query text content related to user questions from the
+          Knowledge
+        multiple_retrieval_config:
+          reranking_enable: false
+          reranking_mode: reranking_model
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 4
+        query_variable_selector:
+        - '1711528914102'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params:
+              frequency_penalty: 0
+              max_tokens: 512
+              presence_penalty: 0
+              temperature: 0
+              top_p: 1
+            mode: chat
+            name: gpt-3.5-turbo
+            provider: openai
+        title: Knowledge Retrieval (1)
+        type: knowledge-retrieval
+      height: 152
+      id: '17385846312060'
+      position:
+        x: 676.2471991748142
+        y: 2549.681655674259
+      positionAbsolute:
+        x: 676.2471991748142
+        y: 2549.681655674259
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - sys
+          - query
+        desc: Invoking large language models to answer questions or process natural
+          language
+        memory:
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            frequency_penalty: 0
+            max_tokens: 512
+            presence_penalty: 0
+            temperature: 0.7
+            top_p: 1
+          mode: chat
+          name: gemini-2.0-flash-exp
+          provider: google
+        prompt_template:
+        - id: 9b6f207d-9ca1-4cd7-a936-9ac543e96ded
+          role: system
+          text: "```xml\n<prompt_template>\n  <instructions>\n    <step>1. 入力されたテキストを注意深く読み、その意味を理解しようと試みてください。</step>\n\
+            \    <step>2. テキストの意味が明確に理解できない場合、またはテキストが意味をなさない、あるいは文法的に誤っていると判断した場合、次のステップに進んでください。</step>\n\
+            \    <step>3. テキストの意味が理解できないという事実を明確に伝える回答を生成してください。回答は簡潔かつ直接的であるべきです。</step>\n\
+            \    <step>4. 回答は「意味がわかりません」というフレーズのみで構成してください。他の言葉や説明、または追加の文を含めないでください。</step>\n\
+            \    <step>5. 回答には、XMLタグを含めないでください。出力はプレーンテキストである必要があります。</step>\n   \
+            \ <step>6. 入力テキストが日本語であるか、他の言語であるかに関わらず、回答は常に日本語で「意味がわかりません」と出力してください。</step>\n\
+            \    <step>7. 入力テキストが空の場合、または空白文字のみで構成されている場合も、同様に「意味がわかりません」と回答してください。</step>\n\
+            \    <step>8. 入力テキストが非常に長く、複雑な構造をしている場合でも、意味が理解できない場合は、迷わず「意味がわかりません」と回答してください。意味を理解しようと過度に時間を費やす必要はありません。</step>\n\
+            \    <step>9. 入力テキストが一部のみ理解できる場合でも、全体として意味が理解できない場合は、「意味がわかりません」と回答してください。部分的な理解に基づいて推測や解釈を試みないでください。</step>\n\
+            \    <step>10. 回答を生成する際には、入力テキストの内容を記憶したり、過去の回答との関連性を考慮したりする必要はありません。各入力テキストに対して独立して判断し、意味が理解できない場合は「意味がわかりません」と回答してください。</step>\n\
+            \  </instructions>\n  <examples>\n    <example>\n      <input>こんにちは</input>\n\
+            \      <output>意味がわかりません</output>\n    </example>\n    <example>\n   \
+            \   <input>これはテストです。</input>\n      <output>意味がわかりません</output>\n    </example>\n\
+            \    <example>\n      <input>asdfghjkl</input>\n      <output>意味がわかりません</output>\n\
+            \    </example>\n    <example>\n      <input>意味不明な文章が入力されました。</input>\n\
+            \      <output>意味がわかりません</output>\n    </example>\n    <example>\n   \
+            \   <input>1234567890</input>\n      <output>意味がわかりません</output>\n    </example>\n\
+            \    <example>\n      <input>   </input>\n      <output>意味がわかりません</output>\n\
+            \    </example>\n  </examples>\n</prompt_template>\n```\n"
+        selected: false
+        title: LLM (1)
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 158
+      id: '17385847659560'
+      position:
+        x: 926.7509145890801
+        y: 2784.0792320386026
+      positionAbsolute:
+        x: 926.7509145890801
+        y: 2784.0792320386026
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#17385847659560.text#}}'
+        desc: ''
+        selected: false
+        title: Answer (1)
+        type: answer
+        variables: []
+      height: 103
+      id: '17385847792280'
+      position:
+        x: 1212.5693610728024
+        y: 2795.258415852015
+      positionAbsolute:
+        x: 1212.5693610728024
+        y: 2795.258415852015
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -147.39248461781085
+      y: -2079.888528930714
+      zoom: 0.8607890850172477
