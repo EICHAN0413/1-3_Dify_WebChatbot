@@ -113,9 +113,43 @@ workflow:
         sourceType: if-else
         targetType: llm
       id: 1738584377542-false-17385847659560-target
+      selected: false
       source: '1738584377542'
       sourceHandle: 'false'
       target: '17385847659560'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: 1738584377542-7e9055b2-25a8-4e7b-af0a-cc79480078e5-17397928769690-target
+      source: '1738584377542'
+      sourceHandle: 7e9055b2-25a8-4e7b-af0a-cc79480078e5
+      target: '17397928769690'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 17397928769690-source-17397927370860-target
+      source: '17397928769690'
+      sourceHandle: source
+      target: '17397927370860'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 17397927370860-source-17397929685710-target
+      source: '17397927370860'
+      sourceHandle: source
+      target: '17397929685710'
       targetHandle: target
       type: custom
       zIndex: 0
@@ -148,6 +182,7 @@ workflow:
         desc: Invoking large language models to answer questions or process natural
           language
         memory:
+          query_prompt_template: '{{#sys.query#}}'
           role_prefix:
             assistant: ''
             user: ''
@@ -175,7 +210,7 @@ workflow:
             \ information from the context.\nAnd answer according to the language\
             \ of the user's question."
         selected: false
-        title: LLM
+        title: LLM2
         type: llm
         variables: []
         vision:
@@ -183,10 +218,10 @@ workflow:
       height: 158
       id: '1711528917469'
       position:
-        x: 945.0755772234622
+        x: 943.9138524555651
         y: 2549.681655674259
       positionAbsolute:
-        x: 945.0755772234622
+        x: 943.9138524555651
         y: 2549.681655674259
       selected: false
       sourcePosition: right
@@ -225,19 +260,29 @@ workflow:
             - sys
             - query
           id: 'true'
+          logical_operator: or
+        - case_id: 7e9055b2-25a8-4e7b-af0a-cc79480078e5
+          conditions:
+          - comparison_operator: contains
+            id: c8065969-4230-4951-ada3-6dd28518ef6e
+            value: テレワーク
+            varType: string
+            variable_selector:
+            - sys
+            - query
           logical_operator: and
         desc: ''
         selected: false
         title: IF/ELSE
         type: if-else
-      height: 126
+      height: 174
       id: '1738584377542'
       position:
-        x: 382.5189742184624
-        y: 2613.793565728311
+        x: 379.1647126045142
+        y: 2611.5573913190124
       positionAbsolute:
-        x: 382.5189742184624
-        y: 2613.793565728311
+        x: 379.1647126045142
+        y: 2611.5573913190124
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -249,13 +294,13 @@ workflow:
         desc: Allows you to query text content related to user questions from the
           Knowledge
         multiple_retrieval_config:
-          reranking_enable: false
+          reranking_enable: true
           reranking_mode: reranking_model
           reranking_model:
-            model: ''
-            provider: ''
-          score_threshold: null
-          top_k: 4
+            model: rerank-english-v2.0
+            provider: cohere
+          score_threshold: 0.8
+          top_k: 1
         query_variable_selector:
         - '1711528914102'
         - sys.query
@@ -274,13 +319,13 @@ workflow:
             provider: openai
         title: Knowledge Retrieval (1)
         type: knowledge-retrieval
-      height: 152
+      height: 114
       id: '17385846312060'
       position:
-        x: 676.2471991748142
+        x: 673.0386359924473
         y: 2549.681655674259
       positionAbsolute:
-        x: 676.2471991748142
+        x: 673.0386359924473
         y: 2549.681655674259
       selected: true
       sourcePosition: right
@@ -335,7 +380,7 @@ workflow:
             \    <example>\n      <input>   </input>\n      <output>意味がわかりません</output>\n\
             \    </example>\n  </examples>\n</prompt_template>\n```\n"
         selected: false
-        title: LLM (1)
+        title: LLM
         type: llm
         variables: []
         vision:
@@ -343,11 +388,11 @@ workflow:
       height: 158
       id: '17385847659560'
       position:
-        x: 926.7509145890801
-        y: 2784.0792320386026
+        x: 659.4713263520216
+        y: 3053.1888580107025
       positionAbsolute:
-        x: 926.7509145890801
-        y: 2784.0792320386026
+        x: 659.4713263520216
+        y: 3053.1888580107025
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -363,17 +408,134 @@ workflow:
       height: 103
       id: '17385847792280'
       position:
+        x: 1219.3292138165464
+        y: 3073.7786237225014
+      positionAbsolute:
+        x: 1219.3292138165464
+        y: 3073.7786237225014
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: Invoking large language models to answer questions or process natural
+          language
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            frequency_penalty: 0
+            max_tokens: 512
+            presence_penalty: 0
+            temperature: 0.7
+            top_p: 1
+          mode: chat
+          name: gemini-2.0-flash-exp
+          provider: google
+        prompt_template:
+        - id: 9b6f207d-9ca1-4cd7-a936-9ac543e96ded
+          role: system
+          text: "You are a helpful assistant. \nUse the following context as your\
+            \ learned knowledge, inside <context></context> XML tags.\n<context>\n\
+            {{#context#}}\n</context>\nWhen answer to user:\n- If you don't know,\
+            \ just say that you don't know.\n- If you don't know when you are not\
+            \ sure, ask for clarification.\nAvoid mentioning that you obtained the\
+            \ information from the context.\nAnd answer according to the language\
+            \ of the user's question."
+        selected: false
+        title: LLM2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 158
+      id: '17397927370860'
+      position:
+        x: 931.3978136606684
+        y: 2779.6455259220334
+      positionAbsolute:
+        x: 931.3978136606684
+        y: 2779.6455259220334
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - e1594b3c-be52-4f5f-a146-09ccc7516fd8
+        desc: Allows you to query text content related to user questions from the
+          Knowledge
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: rerank-english-v2.0
+            provider: cohere
+          score_threshold: 0.8
+          top_k: 3
+        query_variable_selector:
+        - '1711528914102'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params:
+              frequency_penalty: 0
+              max_tokens: 512
+              presence_penalty: 0
+              temperature: 0
+              top_p: 1
+            mode: chat
+            name: gpt-3.5-turbo
+            provider: openai
+        title: Knowledge Retrieval (2)
+        type: knowledge-retrieval
+      height: 114
+      id: '17397928769690'
+      position:
+        x: 668.4217736269475
+        y: 2779.6455259220334
+      positionAbsolute:
+        x: 668.4217736269475
+        y: 2779.6455259220334
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#17397927370860.text#}}'
+        desc: ''
+        selected: false
+        title: Answer (1)
+        type: answer
+        variables: []
+      height: 103
+      id: '17397929685710'
+      position:
         x: 1212.5693610728024
-        y: 2795.258415852015
+        y: 2779.6455259220334
       positionAbsolute:
         x: 1212.5693610728024
-        y: 2795.258415852015
+        y: 2779.6455259220334
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
     viewport:
-      x: -147.39248461781085
-      y: -2079.888528930714
-      zoom: 0.8607890850172477
+      x: 28.201851385840882
+      y: -1851.454081100842
+      zoom: 0.764738456537664
